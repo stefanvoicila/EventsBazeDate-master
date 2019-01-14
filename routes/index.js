@@ -200,12 +200,18 @@ router.get('/event_final_delete/:id', authenticationMiddleware(), function(req, 
 
   const db = require('../db.js');
   var query = 'DELETE FROM Events WHERE Events.Id =' + req.params.id;
+  var query2 = 'DELETE FROM EventParticipants WHERE EventParticipants.EventId = ' + req.params.id;
 
-  db.query(query, function(error, result, fields){
+  db.query(query2, function(error, result, fields){
     if(error) throw (error);
     else{
-      res.status(200).render('success');
-    }
+      db.query(query,function(err, results, field){
+        if(err) throw err;
+        else{
+          res.status(200).render('success');
+        }
+      })
+    };
   });
 });
 
